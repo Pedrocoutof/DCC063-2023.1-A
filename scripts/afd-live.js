@@ -65,28 +65,6 @@ function refreshGraph(){
     
     graph = getAFD();
 
-   // cross-link node objects
-   graph.links.forEach(link => {
-    const a = graph.nodes[link.source];
-    const b = graph.nodes[link.target];
-    if (!a || !b) {
-        return; // skip this link if either a or b is undefined
-    }
-    !a.neighbors && (a.neighbors = []);
-    !b.neighbors && (b.neighbors = []);
-    a.neighbors.push(b);
-    b.neighbors.push(a);
-
-    !a.links && (a.links = []);
-    !b.links && (b.links = []);
-    a.links.push(link);
-    b.links.push(link);
-});
-
-const highlightNodes = new Set();
-const highlightLinks = new Set();
-let hoverNode = null;
-
 
     const Graph = ForceGraph3D()
     (document.getElementById('3d-graph'))
