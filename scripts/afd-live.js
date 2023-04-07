@@ -1,20 +1,19 @@
 
-function getAFD(){
-    
+function getForm(){
+
     alphabet = document.getElementById('alfabeto-input').value.split(',');
     allStates = document.getElementById('estados-input').value.split(',');
-    programFunction = document.getElementById('f-programa-input').value.split(/[()]/);
+    programFunction = document.getElementById('f-programa-input').value.trim().split(/[()]/);
     initialState = document.getElementById('estado-inicial-input').value;
-    endState = document.getElementById('estados-finais-input').value.split(',');
+    endState = document.getElementById('estados-finais-input').value.trim().split(',');
 
-    console.log({ alphabet,allStates,programFunction,initialState,endState })
+    //console.log({ alphabet,allStates,programFunction,initialState,endState })
     return {alphabet,allStates,programFunction,initialState,endState }
 }
 
-function refreshGraph(){
-    const data = getAFD();
+function getAFD(){
+    const data = getForm();
 
-    
     const nodes = [];
     const links = [];
 
@@ -22,8 +21,7 @@ function refreshGraph(){
     data.allStates.forEach(state => {
     nodes.push({
         id: state,
-        name: `State ${state}`,
-        color: "#ff7f0e"
+        color: calcColor(data, state)
     });
     });
 
@@ -45,14 +43,38 @@ function refreshGraph(){
     links
     };
 
+
+    return graph;
+}
+
+function calcColor(afd, id){
+    
+    if(afd.initialState == id){
+        return 'green';
+    }
+
+    if(afd.endState.includes(id) ){
+        return 'red';
+    }
+    
+    return 'blue'
+    
+}
+
+function refreshGraph(){
+    
+    graph = getAFD();
+
     const Graph = ForceGraph3D()
     (document.getElementById('3d-graph'))
         .height('500')
         .width('750')
         .graphData(graph)
         .nodeLabel('id')
-        .linkDirectionalParticles("value")
-        .linkDirectionalParticleSpeed(d => 0.1);
+        .linkLabel('label')
+        .linkDirectionalArrowLength(2.5)
+        .linkDirectionalArrowRelPos(1)
+        .linkCurvature(0.3);
         
 }
 
