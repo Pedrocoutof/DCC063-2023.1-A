@@ -33,8 +33,6 @@
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="card">
-                <div class="card-header">
-                </div>
                   <div class="card-body">
                     <form onkeyup="refreshGraph()" id="form">
                       <!-- Alfabeto -->
@@ -74,8 +72,15 @@
                       </div>
                     </form>
                 </div>
-                <div class="card-footer">
+              </div>
+              
+              <form id="variables" onchange="refreshGraph()">
+              <div class="col m-lg-4">
+                <div class="form-check form-switch">
+                  <input id="particles" class="form-check-input" type="checkbox" checked>
+                  <label class="form-check-label" for="flexSwitchCheckChecked">Particles</label>
                 </div>
+              </form>
               </div>
           </div>
         </div>
