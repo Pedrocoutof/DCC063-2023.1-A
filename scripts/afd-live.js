@@ -13,7 +13,6 @@ function getForm(){
 
 function getVariables(){
     particles = document.getElementById('particles').checked;
-
     return particles
 }
 
@@ -56,14 +55,14 @@ function getAFD(){
 function calcColor(afd, id){
     
     if(afd.initialState == id){
-        return 'green';
+        return document.getElementById('initialState').value;
     }
 
     if(afd.endState.includes(id) ){
-        return 'red';
+        return document.getElementById('endState').value;
     }
     
-    return 'blue'
+    return document.getElementById('state').value;
     
 }
 
