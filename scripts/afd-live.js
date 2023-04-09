@@ -71,82 +71,46 @@ function refreshGraph(){
     variables = getVariables();
     graph = getAFD();
 
-    if(variables){
+    let Graph = ForceGraph3D()
+    (document.getElementById('3d-graph'))
+    .width(document.getElementById('container').offsetWidth)
+    .height(document.getElementById('container').offsetHeight)
+        .graphData(graph)
+        .linkLabel('label')
+        .linkThreeObjectExtend(true)
+        .nodeThreeObject(node => {
+            const sprite = new SpriteText(node.id);
+            sprite.material.depthWrite = false; // make sprite background transparent
+            sprite.color = node.color;
+            sprite.textHeight = 8;
+            return sprite;
+          })
+        .linkThreeObject(link => {
+          const sprite = new SpriteText(`${link.label}`);
+          sprite.color = 'lightgrey';
+          sprite.textHeight = 1.5;
+          return sprite;
+        })
+        .linkPositionUpdate((sprite, { start, end }) => {
+            const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
+              [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
+            })));
+  
+            // Position sprite
+            Object.assign(sprite.position, middlePos);
+          })
+          .linkDirectionalArrowLength(2)
+          .linkDirectionalArrowRelPos(1)
+          .linkCurvature(0.3)
+          .cameraPosition({z: 90})
 
-        const Graph = ForceGraph3D()
-        (document.getElementById('3d-graph'))
-        .width(document.getElementById('container').offsetWidth)
-        .height(document.getElementById('container').offsetHeight)
-            .graphData(graph)
-            .linkLabel('label')
-            .linkThreeObjectExtend(true)
-            .nodeThreeObject(node => {
-                const sprite = new SpriteText(node.id);
-                sprite.material.depthWrite = false; // make sprite background transparent
-                sprite.color = node.color;
-                sprite.textHeight = 8;
-                return sprite;
-              })
-            .linkThreeObject(link => {
-              const sprite = new SpriteText(`${link.label}`);
-              sprite.color = 'lightgrey';
-              sprite.textHeight = 1.5;
-              return sprite;
-            })
-            .linkPositionUpdate((sprite, { start, end }) => {
-                const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
-                  [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
-                })));
-      
-                // Position sprite
-                Object.assign(sprite.position, middlePos);
-              })
-            .linkDirectionalArrowLength(2)
-            .linkDirectionalArrowRelPos(1)
-            .linkCurvature(0.3)
+
+    if(variables){
+      Graph
             .linkDirectionalParticles("target")
             .linkDirectionalParticleSpeed(d => 0.01)
-            .cameraPosition({ z: 100})
-            ;
-            
+            .cameraPosition({ z: 90})            
     }
-    else{
-
-        const Graph = ForceGraph3D()
-        (document.getElementById('3d-graph'))
-        .width(document.getElementById('container').offsetWidth)
-        .height(document.getElementById('container').offsetHeight)
-            .graphData(graph)
-            .linkLabel('label')
-            .linkThreeObjectExtend(true)
-            .nodeThreeObject(node => {
-                const sprite = new SpriteText(node.id);
-                sprite.material.depthWrite = false; // make sprite background transparent
-                sprite.color = node.color;
-                sprite.textHeight = 8;
-                return sprite;
-              })
-            .linkThreeObject(link => {
-              const sprite = new SpriteText(`${link.label}`);
-              sprite.color = 'lightgrey';
-              sprite.textHeight = 1.5;
-              return sprite;
-            })
-            .linkPositionUpdate((sprite, { start, end }) => {
-                const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
-                  [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
-                })));
-      
-                // Position sprite
-                Object.assign(sprite.position, middlePos);
-              })
-            .linkDirectionalArrowLength(2)
-            .linkDirectionalArrowRelPos(1)
-            .linkCurvature(0.3)
-            .cameraPosition({ z: 100})
-            
-    }
-
 }
 
 document.addEventListener("DOMContentLoaded", function() {
