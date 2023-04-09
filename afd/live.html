@@ -17,7 +17,7 @@
     <script src="//unpkg.com/three"></script>
     <script src="//unpkg.com/three-spritetext"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
-    <script  src="/scripts/afd-live.js"></script>
+    <script src="/scripts/afd-live.js"></script>
 </head>
 <body>
     <div id="container" style="background-color: #000011; height:100vh; width:100%;">
@@ -74,26 +74,34 @@
                 </div>
               </div>
               
-              <form id="variables" onchange="refreshGraph()">
+              <form id="variables" class="row" onchange="refreshGraph()">
                 <div class="col m-lg-4">
                   <div class="form-check form-switch">
                     <input id="particles" class="form-check-input" type="checkbox" checked>
                     <label class="form-check-label" for="flexSwitchCheckChecked">Particles</label>
                   </div>
+                  <div class="form-check form-switch">
+                    <input id="focusNode" class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Focus Node</label>
+                  </div>
+                  <div class="form-check form-switch">
+                    <input id="textNode" class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Estados em texto</label>
+                  </div>
               </div>
               <div class="col m-lg-4">
                 <div>
-                  <input id="initialState" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#00ff00" style="width:10%;">
+                  <input id="initialState" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#00ff00" style="width:20%;">
                   <label class="form-check-label" for="flexSwitchCheckChecked">Estado inicial</label>
                 </div>
                 
                 <div>
-                  <input id="endState" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:10%;">
+                  <input id="endState" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:20%;">
                   <label class="form-check-label" for="flexSwitchCheckChecked">Estado final</label>
                 </div>
                 
                 <div>
-                  <input id="state" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#0040ff" style="width:10%;">
+                  <input id="state" type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#0040ff" style="width:20%;">
                   <label class="form-check-label" for="flexSwitchCheckChecked">Estados</label>
                 </div>
               </div>

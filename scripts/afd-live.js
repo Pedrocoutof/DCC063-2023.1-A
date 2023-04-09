@@ -12,8 +12,10 @@ function getForm(){
 }
 
 function getVariables(){
-    particles = document.getElementById('particles').checked;
-    return particles
+  particles = document.getElementById('particles').checked;
+  focusNode = document.getElementById('focusNode').checked;
+  textNode = document.getElementById('textNode').checked;
+    return { particles, focusNode, textNode}
 }
 
 function getAFD(){
@@ -73,43 +75,63 @@ function refreshGraph(){
 
     let Graph = ForceGraph3D()
     (document.getElementById('3d-graph'))
-    .width(document.getElementById('container').offsetWidth)
-    .height(document.getElementById('container').offsetHeight)
-        .graphData(graph)
-        .linkLabel('label')
-        .linkThreeObjectExtend(true)
-        .nodeThreeObject(node => {
-            const sprite = new SpriteText(node.id);
-            sprite.material.depthWrite = false; // make sprite background transparent
-            sprite.color = node.color;
-            sprite.textHeight = 8;
-            return sprite;
-          })
-        .linkThreeObject(link => {
-          const sprite = new SpriteText(`${link.label}`);
-          sprite.color = 'lightgrey';
-          sprite.textHeight = 1.5;
-          return sprite;
+      .width(document.getElementById('container').offsetWidth)
+      .height(document.getElementById('container').offsetHeight)
+      .graphData(graph)
+      .linkLabel('label')
+      .linkThreeObjectExtend(true)
+      .linkThreeObject(link => {
+        const sprite = new SpriteText(`${link.label}`);
+        sprite.color = 'lightgrey';
+        sprite.textHeight = 1.5;
+        return sprite;
+      })
+      .linkPositionUpdate((sprite, { start, end }) => {
+          const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
+            [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
+          })));
+
+          // Position sprite
+          Object.assign(sprite.position, middlePos);
         })
-        .linkPositionUpdate((sprite, { start, end }) => {
-            const middlePos = Object.assign(...['x', 'y', 'z'].map(c => ({
-              [c]: start[c] + (end[c] - start[c]) / 2 // calc middle point
-            })));
-  
-            // Position sprite
-            Object.assign(sprite.position, middlePos);
-          })
-          .linkDirectionalArrowLength(2)
-          .linkDirectionalArrowRelPos(1)
-          .linkCurvature(0.3)
-          .cameraPosition({z: 90})
+      .linkDirectionalArrowLength(2)
+      .linkDirectionalArrowRelPos(1)
+      .linkCurvature(0.3)
+      .cameraPosition({z: 90})
 
 
-    if(variables){
+    if(variables.particles){
       Graph
             .linkDirectionalParticles("target")
             .linkDirectionalParticleSpeed(d => 0.01)
-            .cameraPosition({ z: 90})            
+            .cameraPosition({ z: 90})
+            
+    }
+    if(variables.focusNode){
+      Graph.onNodeClick(node => {
+        const distance = 40;
+        const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
+
+        const newPos = node.x || node.y || node.z
+          ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
+          : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
+
+        Graph.cameraPosition(
+          newPos, // new position
+          node, // lookAt ({ x, y, z })
+          3000  // ms transition duration
+        );
+      });  
+    }
+    if(variables.textNode){
+      Graph
+      .nodeThreeObject(node => {
+          const sprite = new SpriteText(node.id);
+          sprite.material.depthWrite = false; // make sprite background transparent
+          sprite.color = node.color;
+          sprite.textHeight = 8;
+          return sprite;
+        })
     }
 }
 
